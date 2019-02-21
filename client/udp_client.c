@@ -33,8 +33,14 @@ int main() {
 		fgets((void*)buf, BUF_SIZE, stdin);
 		int len = sizeof(host_addr);
 		sendto(sockd, buf, BUF_SIZE, 0, (struct sockaddr*)&host_addr, len);
-		recvfrom(sockd, buf, BUF_SIZE, 0, (struct sockaddr*)&host_addr, &len);
+		if (strcmp(buf, "exit\n") == 0) {
+			break;
+		}
+		recvfrom(sockd, buf, BUF_SIZE, 0, 0, 0);
 		printf("%s", buf);
 	}
+
+	shutdown(sockd, SHUT_RDWR);
+
 	return 0;
 }
